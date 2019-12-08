@@ -1,0 +1,76 @@
+﻿<Window x:Class="SerialTester.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ViewModel"
+        mc:Ignorable="d"
+        Title="Teensy 4.0 Serial Tester" Height="682" Width="838">
+
+    <Window.DataContext>
+        <vm:MainVM/>
+    </Window.DataContext>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding teensyInterface.TeensyID}"/>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>           
+            <ScrollViewer Grid.Column="0" BorderBrush="DarkGray" BorderThickness="1" >
+                <StackPanel>
+                    <TextBlock Text="Text to Send (25kB)" FontSize="14" FontWeight="SemiBold" Margin="0,0,5,5" />
+                    <TextBlock Text="{Binding loremIpsum}" Width="500" TextWrapping="Wrap" HorizontalAlignment="Left" TextAlignment="Justify" Margin="0,0,5,0"/>
+                </StackPanel>
+            </ScrollViewer>
+            <!--<ScrollViewer  Grid.Column="1" Margin="20,0,0,0" >
+                <StackPanel>
+                    <TextBlock Text="Received Text / Messages" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5" />
+                    <TextBlock Text="{Binding receivedText}" TextWrapping="Wrap" TextAlignment="Justify" Width="500" Margin="0,0.6,10,0" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </ScrollViewer>-->
+            <Grid Margin="20,20,0,-1" Grid.Column="2"  >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto" MinWidth="50"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Button Command="{Binding cmdSend}" Content="{Binding sendBtnTxt}"  Grid.Row="0" Grid.ColumnSpan="2"  Margin="0,0,0,5"/>
+                <!--<Button Command="{Binding cmdSend}" Content="Send loop"  Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,5" />-->
+
+                <TextBlock Text="Total (MByte):" Margin="0,5,5,0" Grid.Row="2" Grid.Column="0" />
+                <TextBlock Text="{Binding totalSent, StringFormat=\{0:F2\}}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="0,5,0,0" />
+                
+                <TextBlock Text="Speed (MByte/s):" Margin="0,5,5,0" Grid.Row ="3" Grid.Column="0"  />
+                <TextBlock Text="{Binding sendSpeed, StringFormat=\{0:F2\}}"  Grid.Row ="3" Grid.Column="1" Margin="0,5,0,0" HorizontalAlignment="Right"/>
+
+
+                <TextBlock Text="{Binding uploadMsg}" Grid.Row="6" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
+                <Button Command="{Binding cmdUploadFW}" Content="Upload Firmware" 
+                        ToolTip="Uploads communication firmware to the connected Teensy"
+                        Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>                
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
+
+    
