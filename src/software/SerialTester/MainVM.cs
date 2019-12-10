@@ -19,12 +19,21 @@ namespace ViewModel
             isSending = !isSending;
             sendBtnTxt = isSending ? "Stop sending" : "Send";
 
+            //if (isSending)
+            //{
+            //    teensyInterface.open();
+            //}
+            //else
+            //{
+            //    teensyInterface.close();
+            //}
+
             var sw = new Stopwatch();
             sw.Start();
             int i = 0;
             while (isSending)
             {
-                await teensyInterface.Send(data);
+                await teensyInterface.SendAsync(data);
                 totalSent = 25.0 / 1024.0 * (++i);
                 sendSpeed = totalSent / sw.Elapsed.TotalSeconds;
                 OnPropertyChanged("sendSpeed");
@@ -33,6 +42,14 @@ namespace ViewModel
             sw.Stop();
         }
         bool isSending = false;
+
+        public RelayCommand cmdBreak { get; private set; }
+        void doBreak(object o)
+        {
+            teensyInterface.brk();
+        }
+
+
 
         public RelayCommand cmdUploadFW { get; private set; }
         async void doUpload(object o)
@@ -106,6 +123,8 @@ namespace ViewModel
         {
             cmdSend = new RelayCommand(doSend);
             cmdUploadFW = new RelayCommand(doUpload);
+            cmdBreak = new RelayCommand(doBreak);
+
             loremIpsum = File.ReadAllText("lorem.txt") + "\0";
             teensyInterface = new TeensyInterface();
             uploadMsg = teensyInterface.TeensyID;

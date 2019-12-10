@@ -55,6 +55,7 @@
                 </Grid.RowDefinitions>
 
                 <Button Command="{Binding cmdSend}" Content="{Binding sendBtnTxt}"  Grid.Row="0" Grid.ColumnSpan="2"  Margin="0,0,0,5"/>
+                <Button Command="{Binding cmdBreak}" Content="break"  Grid.Row="5" Grid.ColumnSpan="2"  Margin="0,0,0,5"/>
                 <!--<Button Command="{Binding cmdSend}" Content="Send loop"  Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,5" />-->
 
                 <TextBlock Text="Total (MByte):" Margin="0,5,5,0" Grid.Row="2" Grid.Column="0" />

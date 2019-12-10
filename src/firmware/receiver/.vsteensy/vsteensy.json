@@ -1,0 +1,28 @@
+{
+  "version": "1",
+  "target": "vsCode",
+  "buildSystem": "makefile",
+  "debugSupport": "none",
+  "configurations": [
+    {
+      "name": "default",
+      "guid": "6c607bb1-95e7-44ae-923c-e180284d99c1",
+      "setupType": "expert",
+      "coreBase": "C:\\toolchain\\Teensyduino\\current_fork",
+      "compilerBase": "C:\\toolchain\\gcc\\gcc-arm-none-eabi-5_4-2016q3-20160926-win32",
+      "makefileExtension": null,
+      "copyCore": false,
+      "sharedLibraries": [],
+      "projectLibraries": [],
+      "board": {
+        "name": "Teensy 4.0",
+        "options": {
+          "USB Type": "Serial",
+          "CPU Speed": "600 MHz",
+          "Optimize": "Faster",
+          "Keyboard Layout": "US English"
+        }
+      }
+    }
+  ]
+}
