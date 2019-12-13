@@ -1,13 +1,10 @@
 ﻿using HidLibrary;
+using lunOptics.TeensySharp.Implementation;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Management;
-using lunOptics.TeensySharp;
-using lunOptics.TeensySharp.Implementation;
 using System.Threading;
-using System.ComponentModel;
 
 namespace lunOptics.TeensySharp
 {
@@ -48,7 +45,7 @@ namespace lunOptics.TeensySharp
             ctx = _ctx;
         }
 
-        static public event EventHandler<BoardChangedEventArgs> ConnectedBoardsChanged;
+        static public event EventHandler<ConnectedBoardsChangedArgs> ConnectedBoardsChanged;
         #endregion
 
         #region Port Watching  ------------------------------------------------------
@@ -99,7 +96,7 @@ namespace lunOptics.TeensySharp
             }
         }
 
-        static void FireTheEvent(BoardChangedEventArgs args)
+        static void FireTheEvent(ConnectedBoardsChangedArgs args)
         {
             // This will be on the UI thread's context now...
             ConnectedBoardsChanged?.Invoke(null, args);
@@ -115,13 +112,13 @@ namespace lunOptics.TeensySharp
                 if (type == ChangeType.add)
                 {
                     ConnectedBoards.Add(device);
-                    ConnectedBoardsChanged.ThreadAwareRaise(null, new BoardChangedEventArgs(type, device));
+                    ConnectedBoardsChanged.ThreadAwareRaise(null, new ConnectedBoardsChangedArgs(type, device));
                 }
                 else
                 {
                     var rd = ConnectedBoards.Find(d => d.Serialnumber == device.Serialnumber);
                     ConnectedBoards.Remove(rd);
-                    ConnectedBoardsChanged.ThreadAwareRaise(null, new BoardChangedEventArgs(type, rd));                    
+                    ConnectedBoardsChanged.ThreadAwareRaise(null, new ConnectedBoardsChangedArgs(type, rd));
                 }
             }
         }
@@ -141,7 +138,7 @@ namespace lunOptics.TeensySharp
                 else
                 {
                     customEvent.Invoke(null, e);
-                }                
+                }
             }
         }
 
@@ -153,8 +150,8 @@ namespace lunOptics.TeensySharp
             var vidPidMi = DeviceIdParts[1].Split("&".ToArray());
             if (vidPidMi.Length != 2) return null;  // we are only interested in devices, not interfaces
 
-            uint vid = Convert.ToUInt32(vidPidMi[0].Substring(4, 4), 16);
-            uint pid = Convert.ToUInt32(vidPidMi[1].Substring(4, 4), 16);
+            int vid = Convert.ToInt32(vidPidMi[0].Substring(4, 4), 16);
+            int pid = Convert.ToInt32(vidPidMi[1].Substring(4, 4), 16);
 
             if (vid != pjrcVid) return null;
 
@@ -209,11 +206,11 @@ namespace lunOptics.TeensySharp
 
                 return new Teensy
                 {
-                    UsbType = pid == serPid ? UsbType.UsbSerial : UsbType.HID,
-                    Port = pid == serPid ? (((string)mgmtObj["Caption"]).Split("()".ToArray()))[1] : "",
                     Serialnumber = serNum,
                     BoardType = board,
-                    hidDevice = pid == serPid ? null : HidDevices.Enumerate((int)vid, (int)pid).FirstOrDefault(x => GetSerialNumber(x, 10) == serNum)
+                    UsbType = (pid == serPid ? UsbType.UsbSerial : UsbType.HID),
+                    Port = (pid == serPid ? (((string)mgmtObj["Caption"]).Split("()".ToArray()))[1] : ""),
+                    hidDevice = (pid == serPid ? null : HidDevices.Enumerate(vid, pid).FirstOrDefault(d => GetSerialNumber(d, 10) == serNum)),
                 };
             }
         }
@@ -231,20 +228,20 @@ namespace lunOptics.TeensySharp
             return serialNumber;
         }
 
-        private const uint pjrcVid = 0x16C0;
-        private const uint serPid = 0x483;
-        private const uint halfKayPid = 0x478;
+        private const int pjrcVid = 0x16C0;
+        private const int serPid = 0x483;
+        private const int halfKayPid = 0x478;
         private static readonly string vidStr = "'%USB_VID[_]" + pjrcVid.ToString("X") + "%'";
 
         #endregion       
     }
 
-    public class BoardChangedEventArgs : EventArgs
+    public class ConnectedBoardsChangedArgs : EventArgs
     {
         public readonly ChangeType changeType;
         public readonly ITeensy changedDevice;
 
-        public BoardChangedEventArgs(ChangeType type, ITeensy changedDevice)
+        public ConnectedBoardsChangedArgs(ChangeType type, ITeensy changedDevice)
         {
             this.changeType = type;
             this.changedDevice = changedDevice;

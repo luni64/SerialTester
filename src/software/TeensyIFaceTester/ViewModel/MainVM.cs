@@ -32,7 +32,7 @@ namespace ViewModel
 
         }
 
-        private void Watcher_ConnectionChanged(object sender, BoardChangedEventArgs e)
+        private void Watcher_ConnectionChanged(object sender, ConnectedBoardsChangedArgs e)
         {
             if (e.changeType == ChangeType.add)
             {
