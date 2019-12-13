@@ -63,11 +63,11 @@ namespace ViewModel
             String firmware = "";
             switch(teensyInterface.board)
             {
-                case TeensySharp.PJRC_Board.Teensy_40:
+                case TeensySharp_ssd.PJRC_Board.Teensy_40:
                     firmware = "SerialTest_T4.hex";
                     break;
 
-                case TeensySharp.PJRC_Board.Teensy_36:
+                case TeensySharp_ssd.PJRC_Board.Teensy_36:
                     firmware = "SerialTest_T36.hex";
                     break;
 

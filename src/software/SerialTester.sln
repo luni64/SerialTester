@@ -5,16 +5,11 @@ VisualStudioVersion = 16.0.29505.145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialTester", "SerialTester\SerialTester.csproj", "{B7D6AB40-CBCB-4F6B-B306-AA4AADB3F894}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{8BA3305D-4BA7-4033-AFA3-2004783367DD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNetFmw", "dotNetFmw\dotNetFmw.csproj", "{34E34B2F-8535-4267-BFFD-E739DE1A363C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{91E1840E-2A7E-4C62-BDEF-8DB1151C7EC7}"
-	ProjectSection(SolutionItems) = preProject
-		lorem.txt = lorem.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialSender", "SerialSender\SerialSender.csproj", "{D3E15709-2BF0-48BF-9C14-D6DB47803889}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeensySharp", "TeensyInteface\TeensySharp\TeensySharp.csproj", "{1B845D34-BA16-4D9A-B4D2-067EDF71C931}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeensyIFaceTester", "TeensyIFaceTester\TeensyIFaceTester.csproj", "{87DF961C-0A56-4FBE-92DD-F4E36E1399B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,21 +18,19 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B7D6AB40-CBCB-4F6B-B306-AA4AADB3F894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7D6AB40-CBCB-4F6B-B306-AA4AADB3F894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7D6AB40-CBCB-4F6B-B306-AA4AADB3F894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7D6AB40-CBCB-4F6B-B306-AA4AADB3F894}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BA3305D-4BA7-4033-AFA3-2004783367DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BA3305D-4BA7-4033-AFA3-2004783367DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BA3305D-4BA7-4033-AFA3-2004783367DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BA3305D-4BA7-4033-AFA3-2004783367DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34E34B2F-8535-4267-BFFD-E739DE1A363C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34E34B2F-8535-4267-BFFD-E739DE1A363C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34E34B2F-8535-4267-BFFD-E739DE1A363C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34E34B2F-8535-4267-BFFD-E739DE1A363C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3E15709-2BF0-48BF-9C14-D6DB47803889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3E15709-2BF0-48BF-9C14-D6DB47803889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3E15709-2BF0-48BF-9C14-D6DB47803889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3E15709-2BF0-48BF-9C14-D6DB47803889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B845D34-BA16-4D9A-B4D2-067EDF71C931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B845D34-BA16-4D9A-B4D2-067EDF71C931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B845D34-BA16-4D9A-B4D2-067EDF71C931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B845D34-BA16-4D9A-B4D2-067EDF71C931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87DF961C-0A56-4FBE-92DD-F4E36E1399B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87DF961C-0A56-4FBE-92DD-F4E36E1399B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87DF961C-0A56-4FBE-92DD-F4E36E1399B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87DF961C-0A56-4FBE-92DD-F4E36E1399B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,24 +16,25 @@ void panic()
     }
 }
 
-void checkBuf() // data is (byte) [0,1,2,...0x63FF], -> last byte = (byte)0x63FF = 0xFF , total: 25kB (0x6400)
+void checkBuf() // data is random bytes, last byte 0, first byte checksum
 {
-    if (buffer[dataSize - 1] != 0xFF)
+    if (buffer[dataSize - 1] != 0)
     {
-        Serial1.println("Wrong terminator");
-        panic();
+        Serial.printf("%d Wrong terminator\n", millis());
+        Serial1.println("Wrong terminator");        
+        return;
     }
 
-    int chkSum = 0;
-    for (size_t i = 0; i < dataSize; i++)
+    uint8_t chkSum = 0;
+    for (size_t i = 1; i < dataSize; i++)
     {
         chkSum += buffer[i];
     }
-    
-    if (chkSum != 3264000) //0 + 1 + 2 +...+ 0x63FF
+
+    if (chkSum != buffer[0])
     {
+        Serial.printf("%d ChecksumError   \n", millis());
         Serial1.println("Checksum Error");
-        panic();
     }
 }
 
@@ -45,9 +46,10 @@ void setup()
 
     // debug info on Serial1
     Serial1.begin(230400);
-    Serial1.println("Start");   
+    Serial1.println("Start");
 
-    Serial.setTimeout(1'000);
+    Serial.setTimeout(100);
+    Serial.clear();
 }
 
 void loop()
@@ -58,9 +60,9 @@ void loop()
         if (cnt != dataSize)
         {
             Serial1.printf("wrong size: %d\n", cnt);
+            Serial.printf("%d Wrong size (%d)     \n", millis(), cnt);
         }
-
-        checkBuf();             // check for correct terminator and checksum
+        else   checkBuf();             // check for correct terminator and checksum
         delayMicroseconds(500); // Remove to run stable
     }
 

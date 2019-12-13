@@ -9,73 +9,127 @@ namespace SerialSender
     class Program
     {
         static SerialPort port;
-        static byte[] data = (new byte[1024 * 25]).Select((b, idx) => (byte)idx).ToArray(); // generates 25kB byte array filled with increasing numbers 0,1,...25kByte
+        //static byte[] data = (new byte[1024 * 25]).Select((b, idx) => (byte)idx).ToArray(); // generates 25kB byte array filled with increasing numbers 0,1,...25kByte
 
+        //-------------------------------------------------------------
         static void Main(string[] args)
         {
             if (args.Length == 1)
             {
-                doReceive(args[0]);
-            }
-            else help();           
-        }
-        
-        //-------------------------------------------------------------
-        static void doReceive(String portname)
-        {
-            //int checksum  = data.Sum(d => d);
-            //int lastByte = data[data.Length - 1];
-            //Console.WriteLine($"last byte:{lastByte}, checksum: {checksum}");
-                        
-            Console.Clear();
-            Console.CursorVisible = false;
-            Console.SetCursorPosition(0,  5);
-            Console.WriteLine("Any key to stop sending");
+                //int checksum  = data.Sum(d => d);
+                //int lastByte = data[data.Length - 1];
+                //Console.WriteLine($"last byte:{lastByte}, checksum: {checksum}");
 
-            try
-            {
-                port = new SerialPort(portname);
-                port.Open();
+                byte[] data = prepareData(1024 * 25);
                 
-                double sent = 0;
-                var timer = new Stopwatch();
-                timer.Start();
+                              
+                bool sending = true;
 
-                while (!Console.KeyAvailable) // this while block will only send out multiples of 25kB
+                Console.Clear();
+                Console.CursorVisible = false;
+                Console.SetCursorPosition(0, 5);
+                Console.WriteLine("Space to toggle sending, ESC to quit");
+
+                try
                 {
-                    // send out one data block (25kB)
-                    port.Write(data, 0, data.Length);           
+                    port = new SerialPort(args[0]);  // port name passed as argument 0                    
+                    port.Open();
 
-                    // calculate statistics
-                    sent += data.Length;                        
-                    double t = timer.Elapsed.TotalSeconds;
-                    
-                    // display results
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine($"Sent: {sent/1024/1024,8:F2} MByte");
-                    Console.WriteLine($"Time: {t,8:F2} s");
-                    Console.WriteLine($"Rate: {sent / t/1024/1024,8:F2} MByte/s");
+                    int sentBlocks = 0;
+                    var timer = new Stopwatch();
+                    timer.Start();
+
+                    while (true)
+                    {
+                        while (sending && !Console.KeyAvailable) // this while block will always send out multiples of 25kB
+                        {
+                            // send out one data block (25kB)
+                            port.Write(data, 0, data.Length);
+
+                            // calculate statistics
+
+                            sentBlocks++;
+                            double sentMB = sentBlocks * 25.0 / 1024.0; // kB;
+                            double t = timer.Elapsed.TotalSeconds;
+
+                            // display results
+                            Console.SetCursorPosition(0, 0);
+                            Console.WriteLine($"Blocks (25kB):{sentBlocks,8}");
+                            Console.WriteLine($"Sent:         {sentMB,8:F2} MByte");
+                            Console.WriteLine($"Time:         {t,8:F2} s");
+                            Console.WriteLine($"Rate:         {sentMB / t,8:F2} MByte/s");
+                            showResponse();
+                        }
+
+                        if (Console.KeyAvailable)
+                        {
+                            var key = Console.ReadKey(true).Key;
+                            switch (key)
+                            {
+                                case ConsoleKey.Spacebar:
+                                    sending = !sending;
+                                    break;
+
+                                case ConsoleKey.Escape:
+                                    port.Close();
+                                    Environment.Exit(0);
+                                    break;
+                            }
+                        }
+
+                        showResponse();
+                    }
                 }
-
-                Console.SetCursorPosition(0, 6);
-                
-                Console.WriteLine("Sending stopped, any key to close port and exit");
-                Console.ReadKey(false);
-                while (!Console.KeyAvailable) ;
-                                
-                port.Close();
-                Environment.Exit(0);
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    port?.Close();
+                }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally
-            {
-                port.Close();
-            }
+            else help();
         }
 
+        //-------------------------------------------------------------
+
+        static byte[] prepareData(int size)
+        {
+            byte[] data = new byte[size];
+
+            // fill with random data
+            var rnd = new Random();
+            rnd.NextBytes(data);
+
+            // Terminate with 0
+            data[data.Length - 1] = 0; 
+
+            // place checksum in first slot
+            byte checkSum = (byte)data.Skip(1).Sum(d => d);
+            data[0] = checkSum;
+
+            return data;
+        }
+
+      
+        static int errCnt = 0; 
+
+        static void showResponse()
+        {
+            
+            if (port.BytesToRead > 0)
+            {
+                String response = port.ReadLine();
+                //int blockSize = int.Parse(response);
+
+                Console.SetCursorPosition(0, 8);
+                //Console.WriteLine($"#: {errCnt} wrong block size:{response}, expected: {1024*25}, difference: {1024*25-blockSize}");
+                Console.WriteLine(response);
+
+                Task.Delay(200).Wait();
+            }
+        }
 
         static void help()
         {
